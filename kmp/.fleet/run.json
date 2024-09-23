@@ -1,0 +1,25 @@
+{
+    "configurations": [
+
+        {
+            "name": "composeApp [Desktop] (1)",
+            "type": "gradle",
+            "workingDir": "$PROJECT_DIR$",
+            "tasks": ["desktopRun"],
+            "args": ["-DmainClass=ar.edu.um.pc_builder.MainKt", "--quiet", "-p", "$PROJECT_DIR$/composeApp"],
+            "initScripts": {
+                "flmapper": "ext.mapPath = { path -> path }"
+            }
+        },
+        {
+            "name": "composeApp [Desktop] (2)",
+            "type": "gradle",
+            "workingDir": "$PROJECT_DIR$",
+            "tasks": ["desktopRun"],
+            "args": ["-DmainClass=ar.edu.um.pc_builder.MainKt", "--quiet", "-p", "$PROJECT_DIR$/composeApp"],
+            "initScripts": {
+                "flmapper": "ext.mapPath = { path -> path }"
+            }
+        }
+    ]
+}
