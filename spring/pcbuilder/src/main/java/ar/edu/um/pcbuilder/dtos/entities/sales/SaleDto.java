@@ -1,14 +1,17 @@
 package ar.edu.um.pcbuilder.dtos.entities.sales;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.sql.Timestamp;
+import java.util.List;
+import lombok.Data;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class SaleDto {
 
+  private Long id;
+  private Long userId;
+  private Long deviceId;
+  private Double finalPrice;
+  private Timestamp saleDate;
+  private List<SalePersonalizationDto> personalizations;
+  private List<SaleAdditionalItemDto> additionalItems;
 }

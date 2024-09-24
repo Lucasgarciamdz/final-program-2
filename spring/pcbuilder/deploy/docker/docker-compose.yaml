@@ -1,30 +1,32 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: build
-      # Use Buildx to leverage better caching and cross-platform builds
-      x-bake:
-        platforms:
-          - linux/amd64
-          - linux/arm64
-    container_name: springboot-app
-    ports:
-      - "8080:8080"
-    networks:
-      - app-network
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydb
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpassword
-    depends_on:
-      - mysql
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/pcbuilder/readyz || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#      target: build
+#      # Use Buildx to leverage better caching and cross-platform builds
+#      x-bake:
+#        platforms:
+#          - linux/amd64
+#          - linux/arm64
+#    container_name: springboot-app
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - app-network
+#    environment:
+#  MYSQL_DATABASE: pcbuilder
+#  MYSQL_USER: ${MYSQL_USER}
+#  MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#  MYSQL_HOST: mysql
+#  MYSQL_PORT: 3306
+#    depends_on:
+#      - mysql
+#    healthcheck:
+#      test: ["CMD-SHELL", "curl -f http://localhost:8080/pcbuilder/readyz || exit 1"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
 
   mysql:
     image: mysql:8.0
@@ -34,12 +36,13 @@ services:
     networks:
       - app-network
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: user
-      MYSQL_PASSWORD: userpassword
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql-data:/var/lib/mysql
+      - /Users/lucas/facultad/final-program-2/spring/pcbuilder/src/main/java/ar/edu/um/pcbuilder/database/Database.sql:/docker-entrypoint-initdb.d/Database.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 30s
