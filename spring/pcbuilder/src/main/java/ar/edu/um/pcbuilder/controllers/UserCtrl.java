@@ -3,6 +3,8 @@ package ar.edu.um.pcbuilder.controllers;
 import ar.edu.um.pcbuilder.dtos.entities.users.UserDto;
 import ar.edu.um.pcbuilder.dtos.requests.LoginDto;
 import ar.edu.um.pcbuilder.dtos.responses.BaseResponse;
+import ar.edu.um.pcbuilder.exceptions.JwtException;
+import ar.edu.um.pcbuilder.exceptions.UserException;
 import ar.edu.um.pcbuilder.services.UserSvc;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,28 +24,19 @@ public class UserCtrl {
   }
 
   @PostMapping("/sign-in")
-  public BaseResponse<UserDto> signIn(@RequestBody LoginDto loginDto) {
+  public BaseResponse<String> signIn(@RequestBody LoginDto loginDto) throws UserException, JwtException {
     log.info("User sign-in attempt with username: {}", loginDto.getEmail());
-    try {
-      UserDto userDto = userSvc.signIn(loginDto);
-      log.info("User signed in successfully: {}", userDto.getEmail());
-      return new BaseResponse<>("User signed in successfully", userDto);
-    } catch (Exception e) {
-      log.error("Error during user sign-in", e);
-      return new BaseResponse<>("Error during user sign-in", null);
-    }
+    String token = userSvc.signIn(loginDto);
+    log.info("User signed in successfully: {}", loginDto.getEmail());
+    return new BaseResponse<>("User signed in successfully", token);
+
   }
 
   @PostMapping("/sign-up")
-  public BaseResponse<UserDto> signUp(@RequestBody UserDto userDto) {
+  public BaseResponse<String> signUp(@RequestBody UserDto userDto) throws UserException {
     log.info("User sign-up attempt with username: {}", userDto.getEmail());
-    try {
-      UserDto createdUser = userSvc.signUp(userDto);
-      log.info("User signed up successfully: {}", createdUser.getEmail());
-      return new BaseResponse<>("User signed up successfully", createdUser);
-    } catch (Exception e) {
-      log.error("Error during user sign-up", e);
-      return new BaseResponse<>("Error during user sign-up", null);
-    }
+    String token = userSvc.signUp(userDto);
+    log.info("User signed up successfully: {}", userDto.getEmail());
+    return new BaseResponse<>("User signed up successfully", token);
   }
-}
+  }
