@@ -1,4 +1,4 @@
-package ar.edu.um.pc_builder
+package ar.edu.um.pcbuilder
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

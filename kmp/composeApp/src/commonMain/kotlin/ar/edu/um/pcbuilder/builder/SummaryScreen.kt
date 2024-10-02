@@ -1,4 +1,4 @@
-package ar.edu.um.pc_builder.builder
+package ar.edu.um.pcbuilder.builder
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button

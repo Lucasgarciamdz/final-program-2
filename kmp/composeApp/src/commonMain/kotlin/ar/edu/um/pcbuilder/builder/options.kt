@@ -1,6 +1,4 @@
-package ar.edu.um.pc_builder.builder
-
-import ar.edu.um.pc_builder.builder.ComponentOption
+package ar.edu.um.pcbuilder.builder
 
 val ChipOptions = listOf(
     ComponentOption("M1", 0),

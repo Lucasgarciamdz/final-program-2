@@ -1,4 +1,4 @@
-package ar.edu.um.pc_builder
+package ar.edu.um.pcbuilder
 
 interface Platform {
     val name: String

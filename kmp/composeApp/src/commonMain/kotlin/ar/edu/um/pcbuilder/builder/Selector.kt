@@ -1,4 +1,4 @@
-package ar.edu.um.pc_builder.builder
+package ar.edu.um.pcbuilder.builder
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -11,12 +11,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import pc_builder.composeapp.generated.resources.Res
 import pc_builder.composeapp.generated.resources.SCR_20240907_slhu
-import pc_builder.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 fun StepContent(

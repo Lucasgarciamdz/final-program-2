@@ -1,4 +1,4 @@
-package ar.edu.um.pc_builder
+package ar.edu.um.pcbuilder
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport

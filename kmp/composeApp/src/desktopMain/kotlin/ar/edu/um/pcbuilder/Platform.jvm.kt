@@ -1,4 +1,4 @@
-package ar.edu.um.pc_builder
+package ar.edu.um.pcbuilder
 
 class JVMPlatform: Platform {
     override val name: String = "Java ${System.getProperty("java.version")}"
