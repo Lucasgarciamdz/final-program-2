@@ -1,5 +1,8 @@
 package ar.edu.um.pcbuilder.exceptions;
 
+import lombok.Getter;
+
+@Getter
 public class JwtException extends Exception {
   private final String details;
 
@@ -8,7 +11,4 @@ public class JwtException extends Exception {
     this.details = details;
   }
 
-  public String getDetails() {
-    return details;
-  }
 }

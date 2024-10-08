@@ -12,32 +12,23 @@ import com.nimbusds.jose.crypto.ECDSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.annotation.PostConstruct;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.text.ParseException;
-import java.util.Base64;
-import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.security.*;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
+import java.util.Date;
 
 @Component
 @Slf4j
 public class JwtUtils {
 
-  private final String privateKeyString;
-  private final String publicKeyString;
   private final long expirationTime;
   private ECPrivateKey privateKey;
   private ECPublicKey publicKey;
-  
+
   public JwtUtils(JwtPpties jwtPpties) {
-    this.privateKeyString = jwtPpties.privateKey();
-    this.publicKeyString = jwtPpties.publicKey();
     this.expirationTime = Long.parseLong(jwtPpties.expirationTime());
   }
 
@@ -51,8 +42,7 @@ public class JwtUtils {
           .expirationTime(new Date(System.currentTimeMillis() + expirationTime))
           .build();
 
-      SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.ES256).build(),
-          claimsSet);
+      SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.ES256).build(), claimsSet);
       signedJWT.sign(signer);
 
       String token = signedJWT.serialize();
@@ -60,8 +50,7 @@ public class JwtUtils {
       return token;
     } catch (Exception e) {
       log.error("Error generating JWT token", e);
-      throw new JwtException(ErrorDetails.JWT_GENERATION_ERROR.getMessage(),
-          "Error generating JWT token");
+      throw new JwtException(ErrorDetails.JWT_GENERATION_ERROR.getMessage(), "Error generating JWT token");
     }
   }
 
@@ -72,36 +61,28 @@ public class JwtUtils {
       String email = signedJWT.getJWTClaimsSet().getSubject();
       log.debug("Username extracted: {}", email);
       return email;
-    } catch (ParseException e) {
+    } catch (Exception e) {
       log.error("Error parsing JWT token", e);
-      throw new JwtException(ErrorDetails.JWT_PARSING_ERROR.getMessage(),
-          "Error parsing JWT token");
+      throw new JwtException(ErrorDetails.JWT_PARSING_ERROR.getMessage(), "Error parsing JWT token");
     }
   }
 
   @PostConstruct
   public void init() throws JwtException {
     try {
-      this.privateKey = (ECPrivateKey) getPrivateKey();
-      this.publicKey = (ECPublicKey) getPublicKey();
-    } catch (Exception e) {
-      throw new JwtException(ErrorDetails.JWT_KEY_INITIALIZATION_ERROR.getMessage(),
-          "Error initializing JWT keys");
+      // Generate the EC key pair
+      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+      keyPairGenerator.initialize(256); // Specify the key size for ES256 (P-256 curve)
+      KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+      this.privateKey = (ECPrivateKey) keyPair.getPrivate();
+      this.publicKey = (ECPublicKey) keyPair.getPublic();
+
+      log.info("Successfully generated EC key pair");
+    } catch (NoSuchAlgorithmException e) {
+      log.error("Error generating EC key pair", e);
+      throw new JwtException(ErrorDetails.JWT_KEY_INITIALIZATION_ERROR.getMessage(), "Error generating EC key pair");
     }
-  }
-
-  private PrivateKey getPrivateKey() throws Exception {
-    byte[] keyBytes = Base64.getDecoder().decode(privateKeyString);
-    PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-    KeyFactory keyFactory = KeyFactory.getInstance("EC");
-    return keyFactory.generatePrivate(spec);
-  }
-
-  private PublicKey getPublicKey() throws Exception {
-    byte[] keyBytes = Base64.getDecoder().decode(publicKeyString);
-    X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-    KeyFactory keyFactory = KeyFactory.getInstance("EC");
-    return keyFactory.generatePublic(spec);
   }
 
   public boolean validateToken(String token) throws JwtException {
@@ -114,8 +95,7 @@ public class JwtUtils {
       return isValid;
     } catch (Exception e) {
       log.error("Error validating JWT token", e);
-      throw new JwtException(ErrorDetails.JWT_VALIDATION_ERROR.getMessage(),
-          "Error validating JWT token");
+      throw new JwtException(ErrorDetails.JWT_VALIDATION_ERROR.getMessage(), "Error validating JWT token");
     }
   }
 
@@ -125,10 +105,9 @@ public class JwtUtils {
       boolean isExpired = tokenExpirationTime.before(new Date());
       log.debug("Token expiration result: {}", isExpired);
       return isExpired;
-    } catch (ParseException e) {
+    } catch (Exception e) {
       log.error("Error parsing JWT token expiration", e);
-      throw new JwtException(ErrorDetails.JWT_PARSING_ERROR.getMessage(),
-          "Error parsing JWT token expiration");
+      throw new JwtException(ErrorDetails.JWT_PARSING_ERROR.getMessage(), "Error parsing JWT token expiration");
     }
   }
 }

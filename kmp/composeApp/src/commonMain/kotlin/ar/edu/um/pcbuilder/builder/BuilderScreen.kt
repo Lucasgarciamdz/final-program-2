@@ -19,12 +19,12 @@ import pc_builder.composeapp.generated.resources.SCR_20240907_slhu
 object AppleShoppingExperienceScreen : Screen {
     @Composable
     override fun Content() {
-        AppleShoppingExperience()
+        ShoppingExperience()
     }
 }
 
 @Composable
-fun AppleShoppingExperience() {
+fun ShoppingExperience() {
     val navigator = LocalNavigator.currentOrThrow
 
     // Component selection states

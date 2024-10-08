@@ -16,6 +16,7 @@ public class SpringSecurity {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
+        .securityMatcher("/deactivate/**")
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(authorize -> authorize
             .anyRequest().authenticated()

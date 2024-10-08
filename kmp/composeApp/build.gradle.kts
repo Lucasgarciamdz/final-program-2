@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 repositories {
     mavenCentral()
     google()
-    maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental") } // Experimental repo for WASM
+    maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/wasm/experimental") }
 }
 
 plugins {
@@ -36,14 +36,14 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
 
     listOf(
@@ -57,10 +57,10 @@ kotlin {
         }
     }
 
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -85,6 +85,7 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.negotiation)
             implementation(libs.kotlin.serialization)
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -139,6 +140,7 @@ android {
 }
 dependencies {
     implementation(libs.androidx.material3.android)
+    api(libs.kotlinx.datetime)
 }
 
 compose.desktop {
