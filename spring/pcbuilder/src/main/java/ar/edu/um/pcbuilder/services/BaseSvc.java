@@ -5,8 +5,9 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-import ar.edu.um.pcbuilder.properties.WharehousePpties;
+import ar.edu.um.pcbuilder.properties.WarehousePpties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
@@ -21,25 +22,25 @@ import org.springframework.web.client.RestClientException;
 @Slf4j
 public class BaseSvc {
 
-  WharehousePpties wharehousePpties;
-  String baseUrl = "http://localhost:8080";
+  WarehousePpties warehousePpties;
+  private static String baseUrl = "http://localhost:8080";
 
-  HttpHeaders headers = new HttpHeaders();
-  RestClient warehouseClient = RestClient.builder().baseUrl(baseUrl)
-      .defaultHeaders(header -> headers.setAll(this.headers.toSingleValueMap())).build();
+  private static final HttpHeaders headers = new HttpHeaders();
+  private static RestClient warehouseClient;
 
-
-  public BaseSvc(WharehousePpties wharehousePpties) {
-    this.wharehousePpties = wharehousePpties;
-    if (wharehousePpties.baseUrl() != null) {
-      baseUrl = wharehousePpties.baseUrl();
+  public BaseSvc(WarehousePpties warehousePpties) {
+    this.warehousePpties = warehousePpties;
+    if (warehousePpties.baseUrl() != null) {
+      baseUrl = warehousePpties.baseUrl();
     }
+    warehouseClient = RestClient.builder().baseUrl(baseUrl)
+        .defaultHeaders(header -> headers.setAll(headers.toSingleValueMap())).build();
     headers.set("Content-Type", "application/json");
-    headers.set("Authorization", "Bearer " + wharehousePpties.jwt());
+    headers.set("Authorization", "Bearer " + warehousePpties.jwt());
 
   }
 
-  public <T> T makeRequest(String url, HttpMethod method, Object body, Class<T> responseType) {
+  public static <T> T makeRequest(String url, HttpMethod method, Object body, ParameterizedTypeReference<T> responseType) {
 
     log.info("Making request to: " + url);
     try {
@@ -58,7 +59,7 @@ public class BaseSvc {
   }
 
 
-  private void handleHttpError(HttpStatusCodeException e) {
+  private static void handleHttpError(HttpStatusCodeException e) {
     HttpStatusCode status = e.getStatusCode();
     switch (status) {
       case UNAUTHORIZED:

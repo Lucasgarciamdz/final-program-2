@@ -5,7 +5,7 @@ import ar.edu.um.pcbuilder.dtos.requests.LoginDto;
 import ar.edu.um.pcbuilder.exceptions.ErrorDetails;
 import ar.edu.um.pcbuilder.exceptions.JwtException;
 import ar.edu.um.pcbuilder.exceptions.UserException;
-import ar.edu.um.pcbuilder.properties.WharehousePpties;
+import ar.edu.um.pcbuilder.properties.WarehousePpties;
 import ar.edu.um.pcbuilder.repositories.UserRepo;
 import ar.edu.um.pcbuilder.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +23,9 @@ public class UserSvc extends BaseSvc {
   private final JwtUtils jwtUtils;
 
   @Autowired
-  public UserSvc(WharehousePpties wharehousePpties, UserRepo userRepo,
+  public UserSvc(WarehousePpties warehousePpties, UserRepo userRepo,
       PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
-    super(wharehousePpties);
+    super(warehousePpties);
     this.userRepo = userRepo;
     this.passwordEncoder = passwordEncoder;
     this.jwtUtils = jwtUtils;

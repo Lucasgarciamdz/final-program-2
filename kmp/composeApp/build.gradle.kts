@@ -140,7 +140,7 @@ android {
 }
 dependencies {
     implementation(libs.androidx.material3.android)
-    api(libs.kotlinx.datetime)
+    api(libs.kotlinx.datetime.ext)
 }
 
 compose.desktop {

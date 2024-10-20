@@ -2,7 +2,7 @@ package ar.edu.um.pcbuilder.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "wharehouse")
-public record WharehousePpties(String jwt, String baseUrl) {
+@ConfigurationProperties(prefix = "warehouse")
+public record WarehousePpties(String jwt, String baseUrl) {
 
 }
